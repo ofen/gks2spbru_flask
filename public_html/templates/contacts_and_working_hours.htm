@@ -1,0 +1,40 @@
+{% extends 'layout.htm' %}
+{% block content %}
+
+    {% for item in data %}
+
+        <!-- Item -->
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h4>{{ item['name'] }}<br>
+                <small class="text-muted">{{ item['location'] }}</small></h4>   
+                <p>{{ '<br>'.join(item['contact_information']) | safe }}</p>
+
+                {% if item['working_hours'] %}
+
+                    <div class="dropdown">
+                        <a href="#" class="btn-link dropdown-toggle" data-toggle="dropdown">Режим работы</a>
+                        <div class="dropdown-menu dropdown-text">
+                            {{ '<br>'.join(item['working_hours']) | safe }}
+                        </div>
+                    </div>
+
+                {% endif %}
+
+                {% if item['visiting_hours'] %}
+
+                    <div class="dropdown">
+                        <a href="#" class="btn-link dropdown-toggle" data-toggle="dropdown">Часы приема</a>
+                        <div class="dropdown-menu dropdown-text">
+                            {{ '<br>'.join(item['visiting_hours']) | safe }}
+                        </div>
+                    </div>
+
+                {% endif %}
+
+            </div>
+        </div>
+
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,110 @@
+{% extends 'layout.htm' %}
+{% block content %}
+
+    <!-- Note -->
+    <div class="alert alert-info" role="alert">
+        <p>Подробную информацию касательно тарифов, вы можете получить на сайте комитета по тарифам Санкт-Петербурга</p>
+        <p><a href="http://tarifspb.ru/documents/acts/" target="_blank"><span class="glyphicon glyphicon-link"></span> http://tarifspb.ru/documents/acts/</a></p>
+    </div>
+
+    <!-- Table -->
+    <table class="table table-hover">
+        <caption>Жилищные услуги<br><span class="label label-primary">01.07.2018</span></caption>
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Цена</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for value in data.get('Жилищные услуги') %}
+
+                <tr>
+                    <td class="col-xs-10">{{ value[0] }}</td>
+                    <td>{{ value[2] }}</td>
+                </tr>
+            
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+    <!-- Table -->
+    <table class="table table-hover">
+        <caption>Коммунальные услуги<br><span class="label label-primary">01.07.2018</span></caption>
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Цена</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for value in data.get('Коммунальные услуги') %}
+
+                <tr>
+                    <td class="col-xs-10">{{ value[0] }}</td>
+                    <td>{{ value[2] }}</td>
+                </tr>
+            
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+    <!-- Table -->
+    <table class="table table-hover">
+        <caption>Жилищные услуги<br><span class="label label-primary">01.01.2018</span></caption>
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Цена</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for value in data.get('Жилищные услуги') %}
+
+                <tr>
+                    <td class="col-xs-10">{{ value[0] }}</td>
+                    <td>{{ value[1] }}</td>
+                </tr>
+            
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+    <!-- Table -->
+    <table class="table table-hover">
+        <caption>Коммунальные услуги<br><span class="label label-primary">01.01.2018</span></caption>
+        <thead>
+            <tr>
+                <th>Наименование</th>
+                <th>Цена</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for value in data.get('Коммунальные услуги') %}
+
+                <tr>
+                    <td class="col-xs-10">{{ value[0] }}</td>
+                    <td>{{ value[1] }}</td>
+                </tr>
+
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+    <hr>
+
+    {% for filename, filelink in data.get('files').items() %}
+
+        <p><a href="{{ filelink }}" target="_blank"><span class="glyphicon glyphicon-link"></span> {{ filename }}</a></p>
+    
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'layout.htm' %}
+{% block content %}
+
+    <!-- Button -->
+    <p><button type="button" class="btn btn-primary" data-toggle="modal" data-target="#out_of_service">Более не обслуживаются</button></p>
+
+    <!-- Search -->
+    <div class="form-group">
+        <label for="search">Поиск</label>
+        <input type="text" name="search" id="search_data" placeholder="Начните поиск..." class="form-control">
+    </div>
+
+    <!-- Table -->
+    <table class="table table-hover" id="data_list">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Адрес</th>
+                <th>ЭУ</th>
+                <th>ДУ</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for house_data in data.get('in_service') %}
+
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ house_data[0] }}</td>
+                    <td>{{ house_data[1] }}</td>
+                    <td>{{ house_data[2] }}</td>
+                </tr>
+            
+            {% endfor %}
+
+        </tbody>
+    </table>
+
+    <!-- Modal dialog -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="out_of_service">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                    {% for year, year_data in data.get('out_of_service').items() %}
+
+                        <table class="table table-hover">
+                            <caption>Более не обслуживаются<br><span class="label label-primary">{{ year }}</span></caption>
+                            <thead>
+                                <tr>
+                                    <th>Адрес</th>
+                                    <th>Примечание</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                {% for _house_data in year_data %}
+
+                                    <tr>
+                                        <td class="col-xs-8">{{ _house_data[0] }}</td>
+                                        <td>{{ _house_data[1] }}</td>
+                                    </tr>
+                                
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+
+                    {% endfor %}
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

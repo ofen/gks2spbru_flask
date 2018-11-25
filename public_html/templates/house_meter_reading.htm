@@ -1,0 +1,210 @@
+{% extends 'layout.htm' %}
+{% block content %}
+
+    {% if request.path == '/house_meter_reading' %}
+
+        <!-- Default -->
+
+        {% for year, year_data in data.items() %}
+
+            <!-- Table -->
+            <table class="table table-hover">
+                <caption>Показания общедомовых приборов учета<br><span class="label label-primary">{{ year }}</span></caption>
+                <thead>
+                    <tr>
+                        <th>Месяц</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for month, links in year_data.items() %}
+
+                        <tr>
+                            <td class="col-xs-10">{{ month }}</td>
+                            <td>
+                                <!-- Dropdown button -->
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Подробнее</button>
+                                    <ul class="dropdown-menu dropdown-menu-right">
+                                        <li><a href="{{ PATH . links[0] }}">ХВС</a></li>
+                                        <li><a href="{{ PATH . links[1] }}">ГВС</a></li>
+                                        <li><a href="{{ PATH . links[2] }}">Эл. энергия</a></li>
+
+                                        {% if links[3] != '#' %}
+
+                                            <li><a href="{{ PATH . links[3] }}">Теп. энергия</a></li>
+
+                                        {% else %}
+
+                                            <li class="disabled"><a href="#">Теп. энергия</a></li>
+                                        
+                                        {% endif %}
+
+                                    </ul>
+                                </div>   
+                            </td>
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        
+        {% endfor %}
+
+    {% endif %}
+
+    {% if request.path == '/house_meter_reading/cold_water' %}
+
+        <!-- Cold water -->
+        <p><a href="/house_meter_reading" class="btn btn-primary">Вернуться</a></p>
+
+        <!-- Search -->
+        <div class="form-group">
+            <label for="search">Поиск</label>
+            <input type="text" name="search" id="search_data" placeholder="Начните поиск..." class="form-control">
+        </div>
+
+        <!-- Table -->
+        <table class="table table-hover" id="data_list">
+            <caption>Холодная вода<br><span class="label label-primary">{{ request.args.get('date') }}</span></caption>
+            <thead>
+                <tr>
+                    <th>Адрес</th>
+                    <th>Пред. расход, м<sup>3</sup></th>
+                    <th>Тек. расход, м<sup>3</sup></th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for row in data.values() %}
+
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                        <td>{{ row[2] }}</td>
+                    </tr>
+                
+                {% endfor %}
+
+            </tbody>
+        </table>
+
+    {% endif %}
+
+    {% if request.path == '/house_meter_reading/hot_water' %}
+
+        <!-- Hot water -->
+        <p><a href="/house_meter_reading" class="btn btn-primary">Вернуться</a></p>
+
+        <!-- Search -->
+        <div class="form-group">
+            <label for="search">Поиск</label>
+            <input type="text" name="search" id="search_data" placeholder="Начните поиск..." class="form-control">
+        </div>
+
+        <!-- Table -->
+        <table class="table table-hover" id="data_list">
+            <caption>Горячая вода<br><span class="label label-primary">{{ request.args.get('date') }}</span></caption>
+            <thead>
+                <tr>
+                    <th>Адрес</th>
+                    <th>Пред. расход, м<sup>3</sup></th>
+                    <th>Тек. расход, м<sup>3</sup></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for row in data.values() %}
+
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                        <td>{{ row[2] }}</td>
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+        
+    {% endif %}
+
+    {% if request.path == '/house_meter_reading/electric_energy' %}
+
+        <!-- Electric energy -->
+        <p><a href="/house_meter_reading" class="btn btn-primary">Вернуться</a></p>
+
+        <!-- Search -->
+        <div class="form-group">
+            <label for="search">Поиск</label>
+            <input type="text" name="search" id="search_data" placeholder="Начните поиск..." class="form-control">
+        </div>
+
+        <!-- Table -->
+        <table class="table table-hover" id="data_list">
+            <caption>Электрическая энергия<br><span class="label label-primary">{{ request.args.get('date') }}</span></caption>
+            <thead>
+                <tr>
+                    <th>Адрес</th>
+                    <th>Пред. расход, кВт/ч</th>
+                    <th>Тек. расход, кВт/ч</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for row in data.values() %}
+
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                        <td>{{ row[2] }}</td>
+                    </tr>
+                
+                {% endfor %}
+
+            </tbody>
+        </table>
+        
+    {% endif %}
+
+    {% if request.path == '/house_meter_reading/heat_energy' %}
+
+        <!-- Heat energy -->
+        <p><a href="/house_meter_reading" class="btn btn-primary">Вернуться</a></p>
+
+        <!-- Search -->
+        <div class="form-group">
+            <label for="search">Поиск</label>
+            <input type="text" name="search" id="search_data" placeholder="Начните поиск..." class="form-control">
+        </div>
+
+        <!-- Table -->
+        <table class="table table-hover" id="data_list">
+            <caption>Тепловая энергия<br><span class="label label-primary">{{ request.args.get('date') }}</span></caption>
+            <thead>
+                <tr>
+                    <th>Адрес</th>
+                    <th>Пред. расход, Гкал</th>
+                    <th>Тек. расход, Гкал</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for row in data.values() %}
+
+                    <tr>
+                        <td>{{ row[0] }}</td>
+                        <td>{{ row[1] }}</td>
+                        <td>{{ row[2] }}</td>
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+        
+    {% endif %}
+
+{% endblock %}

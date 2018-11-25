@@ -1,0 +1,31 @@
+{% extends 'layout.htm' %}
+{% block content %}
+
+    {% for division, employees in data.items() %}
+
+        <!-- Division -->
+        <h4>{{ division }}</h4>
+
+        {% for employee in employees %}
+
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="media">
+                        <div class="media-left">
+                            <img class="media-object" data-src="{{ employee.get('photo') }}" alt="150x150" style="width: 150px; height: 150px">
+                        </div>
+                        <div class="media-body">
+                            <h4 class="media-heading">{{ employee.get('fullname') }}<br>
+                            <small>{{ employee.get('job_title') }}</small></h4>
+                            <p>Телефон: {{ employee.get('phone') }}<br>
+                            Адрес: {{ employee.get('location') }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+        {% endfor %}
+
+    {% endfor %}
+
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'layout.htm' %}
+{% block content %}
+
+    <!-- Note -->
+    <div class="alert alert-info" type="alert">
+        <strong>Прохорова Лариса Валентиновна</strong><br>
+        Начальник отдела персонала<br>
+        Телефон: 708-93-30 доб.4060<br>
+        Адрес электронной почты: prohorova_larisa @ bk.ru
+    </div>
+
+    {% for job in data %}
+        
+        <!-- Item -->
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <h4>{{ job.get('job_title') }}<br>
+                <small class="text-muted">{{ job.get('salary') }}</small></h4>
+                <p>Характер работы: {{ job.get('job_type') }}<br>
+                Рабочий день: {{ job.get('workday') }}<br>
+                Требуемый опыт: {{ job.get('experience') }}<br>
+                Дополнительно: {{ job.get('extra') }}</p>
+            </div>
+        </div>
+
+    {% endfor %}
+
+{% endblock %}

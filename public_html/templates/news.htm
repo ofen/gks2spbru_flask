@@ -1,0 +1,18 @@
+{% extends 'layout.htm' %}
+{% block content %}
+    
+    {% for html in data %}
+
+        <!-- Post -->
+        <div class="panel panel-default">
+            <div class="panel-body">
+                {{ html | safe }}
+            </div>
+        </div>
+    
+    {% endfor %}
+
+    <!-- Load more button -->
+    <button type="button" class="btn btn-primary btn-block" id="load_more">Еще новости</button>
+
+{% endblock %}

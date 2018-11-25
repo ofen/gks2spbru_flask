@@ -1,0 +1,30 @@
+{% extends 'layout.htm' %}
+{% block content %}
+
+    {% for dir, files in data.items() %}
+
+        <!-- Table -->
+        <table class="table table-hover">
+            <caption>Административная ответственность<br><span class="label label-primary">{{ dir }}</span></caption>
+            <thead>
+                <tr>
+                    <th>Имя</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <repeat group="{{ files }}" value="{{ filelink }}">
+
+                {% for filelink in files %}
+                    <tr>
+                        <td class="col-xs-10">{{ filelink }}</td>
+                        <td><a href="{{ filelink }}" target="_blank" class="btn btn-primary"><span class="glyphicon glyphicon-download-alt"></span> Скачать</a></td>
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>      
+    </repeat>
+
+{% endblock %}

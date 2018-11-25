@@ -1,0 +1,31 @@
+{% extends 'layout.htm' %}
+{% block content %}
+
+    {% for year, year_data in data.items() %}
+
+        <!-- Table -->
+        <table class="table table-hover">
+            <caption>Тех. обслуживания внутридомового газового оборудования<br><span class="label label-primary">{{ year }}</span></caption>
+            <thead>
+                <tr>
+                    <th>Имя</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for filename, filelink in year_data.items() %}
+
+                    <tr>
+                        <td class="col-xs-10">{{ filename }}</td>
+                        <td><a href="{{ filelink }}" target="_blank" class="btn btn-primary"><span class="glyphicon glyphicon-download-alt"></span> Скачать</a></td>
+                    </tr>
+                
+                {% endfor %}
+
+            </tbody>
+        </table>
+    
+    {% endfor %}
+
+{% endblock %}

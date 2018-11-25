@@ -1,0 +1,32 @@
+{% extends 'layout.htm' %}
+{% block content %}
+
+    {% for year, year_chunks in data.items() %}
+
+        <p class="text-muted">Нас благодарят<br><span class="label label-primary">{{ year }}</span></p class="text-muted">
+
+        {% for chunk in year_chunks %}
+
+            <div class="row">
+
+                {% for item in chunk %}
+
+                    <div class="col-sm-6 col-md-4">
+                        <div class="thumbnail thumbnail-h200">
+                            <a href="{{ item }}" target="_blank"><img data-src="{{ item }}"></a>
+                        </div>
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <p>Нет записей</p>
+
+        {% endfor %}
+
+    {% endfor %}
+
+{% endblock %}

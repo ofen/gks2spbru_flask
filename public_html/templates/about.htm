@@ -1,0 +1,115 @@
+{% extends 'layout.htm' %}
+{% block content %}
+
+    <!-- Info -->
+    <p>
+        <strong>Членство в саморегулируемой организации</strong><br>
+        <a href="static/doc/Свидетельство_СРО-0010-УК-2011-7805458533_01.11.2011.pdf" target="_blank"><span class="glyphicon glyphicon-link"></span> Свидетельство №СРО-0010-УК-2011-7805458533 от 01.11.2011</a><br>
+        <a href="static/doc/Свидетельство_0075_02-2011-7805458533-С-052_21.12.2011.pdf" target="_blank"><span class="glyphicon glyphicon-link"></span> Свидетельство №0075.02-2011-7805458533-С-052 от 21.12.2011</a>
+    </p>
+    <p>
+        <strong>Учредительные документы</strong><br>
+        <a href="static/doc/Свидетельство_ОГРН.pdf" target="_blank"><span class="glyphicon glyphicon-link"></span> Свидетельство ОГРН</a><br>
+        <a href="static/doc/Свидетельство_ИНН_КПП.pdf" target="_blank"><span class="glyphicon glyphicon-link"></span> Свидетельство ИНН/КПП</a><br>
+        <a href="static/doc/Устав.pdf" target="_blank"><span class="glyphicon glyphicon-link"></span> Устав</a><br>
+        <a href="static/doc/Лицензия_78-000016_03.04.2015.pdf" target="_blank"><span class="glyphicon glyphicon-link"></span> Лицензия №78-000016 от 03.04.2015</a><br>
+    </p>
+
+    <!-- Button -->
+    <p>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#org_activity">Деятельность
+        </button>
+    </p>
+
+    <!-- Button -->
+    <p>
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#org_details">Реквизиты организации
+        </button>
+    </p>
+
+    <!-- Modal dialog -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="org_activity">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Основным  видом  деятельности  ООО  «ЖКС  №2  Кировского  района»  является 
+                    организация эксплуатации жилищного фонда, в том числе:</p>
+                    <ul>
+                        <li>
+                            Выполнение работ по текущему ремонту:
+                            <ul>
+                                <li>Косметический ремонт лестничных клеток</li>
+                                <li>Ремонт трубопроводов центрального отопления</li>
+                                <li>Ремонт трубопроводов холодного водоснабжения</li>
+                                <li>Ремонт трубопроводов горячего водоснабжения</li>
+                                <li>Ремонт трубопроводов канализации</li>
+                                <li>Ремонт кровли</li>
+                                <li>Восстановление электроосвещения</li>
+                                <li>Герметизация стыков стеновых панелей</li>
+                                <li>Смена водосточных труб</li>
+                                <li>Ремонт бункеров мусоропроводов</li>
+                                <li>Установка  металлических  дверей  на  подвальные  и  чердачные помещения</li>
+                            </ul>
+                        </li>
+                        <li>
+                            Выполнение работ по санитарному содержанию и уборке домовладений:
+                            <ul>
+                                <li>Уборка придомовой территории</li>
+                                <li>Уборка лестничных клеток</li>
+                                <li>Обслуживание мусоропроводов</li>
+                            </ul>
+                        </li>
+                        <li>Обеспечение бесперебойной работы инженерного оборудования жилых зданий</li>
+                        <li>Обслуживание домов ЖСК</li>
+                        <li>Управление  и  обслуживание  домов  ТСЖ,  с  которыми  заключены договоры управления</li>
+                        <li>Управление  и  обслуживание  жилых  домов  переданных  на  управление Общества на основании решений собственников помещений в этих домах</li>
+                        <li>Взыскание задолженности по квартирной плате</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal dialog -->
+    <div class="modal fade" tabindex="-1" role="dialog" id="org_details">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p><strong>Краткое наименование юридического лица</strong><br>
+                    ООО «ЖКС №2 Кировского района»</p>
+                    <p><strong>Полное наименование юридического лица</strong><br>
+                    Общество с ограниченной ответственностью «Жилкомсервис №2 Кировского района»</p>
+                    <p><strong>Юридический адрес</strong><br>
+                    198095, г. Санкт-Петербург, Зои Космодемьянской ул., д.13, лит.А</p>
+                    <p><strong>Фактический адрес</strong><br>
+                    198095, г. Санкт-Петербург, Зои Космодемьянской ул., д.13, лит.А</p>
+                    <p><strong>ОГРН</strong><br>
+                    1089847141218</p>
+                    <p><strong>ИНН</strong><br>
+                    7805458533</p>
+                    <p><strong>КПП</strong><br>
+                    780501001</p>
+                    <p><strong>ОКПО</strong><br>
+                    74808321</p>
+                    <p><strong>ОКВЭД</strong><br>
+                    68.32.1</p>
+                    <p><strong>Наименование банка</strong><br>
+                    Нарвское отделение ПАО "Банк Санкт-Петербург"</p>
+                    <p><strong>БИК</strong><br>
+                    044030790</p>
+                    <p><strong>Расчетный счет</strong><br>
+                    40702810645000001875</p>
+                    <p><strong>Корреспондентский счет</strong><br>
+                    30101810900000000790</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
