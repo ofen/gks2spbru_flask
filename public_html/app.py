@@ -1,13 +1,14 @@
-import config
+import database
 from utility import chunks
 import datetime
-import json
-
+import os
 
 from flask import Flask
 from flask import render_template
 from flask import request
 from flask import make_response
+from flask import jsonify
+from flask import send_file
 
 from natsort import natsorted
 
@@ -15,7 +16,7 @@ from glob import glob
 
 app = Flask(__name__)
 
-app.jinja_env.globals['navbar'] = config.navbar_structure()
+app.jinja_env.globals['navbar'] = database.navbar_structure
 
 
 
@@ -48,10 +49,8 @@ def news():
                 file_content = fh.read()
                 data.append(file_content)
 
-        json_data = json.dumps({'result': data, 'lenght': len(files)})
-        res = make_response(json_data)
-        res.mimetype = 'application/json'
-        return res
+        json_data = {'result': data, 'lenght': len(files)}
+        return jsonify(json_data)
 
     else:
 
@@ -68,17 +67,17 @@ def about():
 
 @app.route('/organization_structure')
 def organization_structure():
-    data = config.organization_structure()
+    data = database.organization_structure
     return render_template('organization_structure.htm', data=data)
 
 @app.route('/job')
 def job():
-    data = config.job()
+    data = database.job
     return render_template('job.htm', data=data)
 
 @app.route('/houses_in_service')
 def houses_in_service():
-    data = config.houses_in_service()
+    data = database.houses_in_service
     return render_template('houses_in_service.htm', data=data)
 
 @app.route('/thank_you_letter')
@@ -98,8 +97,13 @@ def thank_you_letter():
 
 @app.route('/contacts_and_working_hours')
 def contacts_and_working_hours():
-    data = config.contacts_and_working_hours()
+    data = database.contacts_and_working_hours
     return render_template('contacts_and_working_hours.htm', data=data)
+
+@app.route('/house_service_contract')
+def house_service_contract():
+    file = 'static/doc/Договор_управления_МКД.pdf'
+    return send_file(file, mimetype='application/pdf', attachment_filename='test.pdf')
 
 @app.route('/test')
 def test():
