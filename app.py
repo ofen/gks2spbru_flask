@@ -2,6 +2,7 @@ import database
 from utility import chunks
 import datetime
 import os
+import io
 
 from flask import Flask
 from flask import render_template
@@ -9,6 +10,7 @@ from flask import request
 from flask import make_response
 from flask import jsonify
 from flask import send_file
+
 
 from natsort import natsorted
 
@@ -103,7 +105,7 @@ def contacts_and_working_hours():
 @app.route('/house_service_contract')
 def house_service_contract():
     file = 'static/doc/Договор_управления_МКД.pdf'
-    return send_file(file, mimetype='application/pdf', attachment_filename='test.pdf')
+    return send_file(io.StringIO(file), mimetype='application/pdf', attachment_filename='test.pdf', as_attachment=True)
 
 @app.route('/test')
 def test():
