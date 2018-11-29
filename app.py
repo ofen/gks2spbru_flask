@@ -12,6 +12,8 @@ from flask import make_response
 from flask import jsonify
 from flask import send_file
 from flask import abort
+from flask import redirect
+from flask import url_for
 
 
 from natsort import natsorted
@@ -89,13 +91,11 @@ def thank_you_letter():
 
     path = 'static/doc/thank_you_letter'
     data = dict();
-    years = map(str, range(2012, 2018))
+    years = map(str, range(2018, 2011, -1))
 
     for year in years:
         year_data = glob(f'{path}/*_{year}.jpg')
-        data[year] = chunks(year_data, 3)
-
-    data = {key:value for (key, value) in sorted(data.items(), reverse=True)}
+        data[year] = utility.chunks(year_data, 3)
 
     return render_template('thank_you_letter.htm', data=data)
 
@@ -107,13 +107,21 @@ def house_service_contract():
 
 @app.route('/law')
 def law():
-    return render_template('law.htm')
+    path = 'static/doc/law'
+    data = dict()
+    years = map(str, range(2018, 2011, -1))
+
+    for year in years:
+        year_data = glob(f'{path}/*.{year}.pdf')
+        data[year] = utility.to_generator(year_data)
+
+    return render_template('law.htm', data=data)
 
 @app.route('/press')
 def press():
     files = glob('data/press/*.htm')
 
-    natsorted(files, reverse=True)
+    files = natsorted(files, reverse=True)
     
     files = [file for file in utility.chunks(files, 3)]
 
@@ -162,8 +170,7 @@ def utility_rate():
 
 @app.route('/cost_reduction')
 def cost_reduction():
-    data = database.cost_reduction
-    return render_template('cost_reduction.htm', data=data)
+    return render_template('cost_reduction.htm')
 
 @app.route('/financial_report')
 def financial_report():
@@ -199,8 +206,6 @@ def house_meter_reading_report(report_type, date):
                 data = csv.reader(csvfile)
 
                 return render_template('house_meter_reading.htm', data=data, report_type=report_type, date=date)
-        
-                    
 
         except FileNotFoundError:
             return abort(404)
@@ -227,6 +232,23 @@ def weekly_report():
     data = database.weekly_report.keys()
     data = list(data)[::-1]
     return render_template('weekly_report.htm', data=data)
+
+@app.route('/weekly_report/<date>')
+def weekly_report_(date):
+    if date in database.weekly_report.keys():
+        data = utility.chunks(database.weekly_report.get(date), 3)
+        return render_template('weekly_report.htm', data=data, date=date)
+    else:
+        abort(404)
+
+@app.route('/purchases')
+def purchases():
+    return render_template('purchases.htm')
+
+@app.route('/gas_equipment_service')
+def gas_equipment_service():
+    data = database.gas_equipment_service
+    return render_template('gas_equipment_service.htm', data=data)
 
 @app.route('/test')
 def test():

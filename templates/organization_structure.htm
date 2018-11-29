@@ -12,7 +12,7 @@
                 <div class="panel-body">
                     <div class="media">
                         <div class="media-left">
-                            <img class="media-object" data-src="{{ employee.get('photo') }}" alt="150x150" style="width: 150px; height: 150px">
+                            <img class="media-object" data-src="{{ url_for('static', filename=employee.get('photo')) }}" alt="150x150" style="width: 150px; height: 150px">
                         </div>
                         <div class="media-body">
                             <h4 class="media-heading">{{ employee.get('fullname') }}<br>

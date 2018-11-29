@@ -1,7 +1,7 @@
 {% extends 'layout.htm' %}
 {% block content %}
 
-    {% if request.path == '/weekly_report' %}
+    {% if date == Null %}
 
         <!-- Default -->
 
@@ -18,15 +18,7 @@
                 <tbody>
                     <tr>
                         <td class="col-xs-10">Текущий ремонт</td>
-                        <td><a href="{{ request.path }}/service_report?date={{ period }}" class="btn btn-primary">Подробнее</a></td>
-                    </tr>
-                    <tr>
-                        <td class="col-xs-10">Благоустройство территории</td>
-                        <td><a href="{{ request.path }}/landscaping_report?date={{ period }}" class="btn btn-primary">Подробнее</a></td>
-                    </tr>
-                    <tr>
-                        <td class="col-xs-10">Обращения</td>
-                        <td><a href="{{ request.path }}/appeal_report?date={{ period }}" class="btn btn-primary">Подробнее</a></td>
+                        <td><a href="{{ request.path + '/' + period }}" class="btn btn-primary">Подробнее</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -35,13 +27,13 @@
 
     {% endif %}
 
-    {% if request.path == '/weekly_report/service_report' %}
+    {% if date %}
 
         <!-- Service report -->
 
         <p><a href="/weekly_report" class="btn btn-primary">Вернуться</a></p>
 
-        <p class="text-muted">Еженедельный отчет<br><span class="label label-primary">{{ request.args.get('date') }}</span></p class="text-muted">
+        <p class="text-muted">Еженедельный отчет<br><span class="label label-primary">{{ date }}</span></p class="text-muted">
 
         {% for row in data %}
 
@@ -52,7 +44,7 @@
 
                     <div class="col-sm-6 col-md-4">
                         <div class="thumbnail thumbnail-h200">
-                            <a href="/doc/weekly_report/{{ col[0] }}" target="_blank"><img data-src="/doc/weekly_report/{{ col[0] }}"></a>
+                            <a href="{{ url_for('static', filename='doc/weekly_report/' + col[0]) }}" target="_blank"><img data-src="{{ url_for('static', filename='doc/weekly_report/' + col[0]) }}"></a>
                             <div class="caption">
                                 <h4>{{ col[1] }}</h4>
                                 <p>{{ col[2] }}</p>
@@ -65,18 +57,6 @@
             </div>
 
         {% endfor %}
-
-    {% endif %}
-
-    {% if request.path == '/weekly_report/landscaping_report' %}
-
-        <!-- Landscaping report -->
-
-    {% endif %}
-
-    {% if request.path == '/weekly_report/appeal_report' %}
-
-        <!-- Appeal report -->
 
     {% endif %}
 

@@ -1,11 +1,11 @@
 {% extends 'layout.htm' %}
 {% block content %}
 
-    {% for dir, files in data.items() %}
+    {% for year, files in data.items() %}
 
         <!-- Table -->
         <table class="table table-hover">
-            <caption>Административная ответственность<br><span class="label label-primary">{{ dir }}</span></caption>
+            <caption>Административная ответственность<br><span class="label label-primary">{{ year }}</span></caption>
             <thead>
                 <tr>
                     <th>Имя</th>
@@ -13,18 +13,24 @@
                 </tr>
             </thead>
             <tbody>
-                <repeat group="{{ files }}" value="{{ filelink }}">
 
-                {% for filelink in files %}
+                {% for file in files %}
+
                     <tr>
-                        <td class="col-xs-10">{{ filelink }}</td>
-                        <td><a href="{{ filelink }}" target="_blank" class="btn btn-primary"><span class="glyphicon glyphicon-download-alt"></span> Скачать</a></td>
+                        <td class="col-xs-10">{{ file | basename }}</td>
+                        <td><a href="{{ url_for('static', filename=file) }}" target="_blank" class="btn btn-primary"><span class="glyphicon glyphicon-download-alt"></span> Скачать</a></td>
                     </tr>
 
                 {% endfor %}
 
             </tbody>
         </table>      
-    </repeat>
+
+    {% else %}
+
+        <p class="text-muted">Нет данных<br>
+        <span class="label label-primary">{{ year }}</span></p>
+
+    {% endfor %}
 
 {% endblock %}

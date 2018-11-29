@@ -12,11 +12,11 @@
         </thead>
         <tbody>
 
-            {% for filename, filelink in files.items() %}
+            {% for filename, filelink in data.items() %}
 
                 <tr>
                     <td class="col-xs-10">{{ filename }}</td>
-                    <td><a href="{{ filelink }}" target="_blank" class="btn btn-primary"><span class="glyphicon glyphicon-download-alt"></span> Скачать</a></td>
+                    <td><a href="{{ url_for('static', filename=filelink) }}" target="_blank" class="btn btn-primary"><span class="glyphicon glyphicon-download-alt"></span> Скачать</a></td>
                 </tr>
 
             {% endfor %}

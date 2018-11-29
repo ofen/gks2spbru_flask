@@ -27,13 +27,13 @@
                                 <div class="dropdown">
                                     <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Подробнее</button>
                                     <ul class="dropdown-menu dropdown-menu-right">
-                                        <li><a href="{{ request.path + links[0] }}">ХВС</a></li>
-                                        <li><a href="{{ request.path + links[1] }}">ГВС</a></li>
-                                        <li><a href="{{ request.path + links[2] }}">Эл. энергия</a></li>
+                                        <li><a href="{{ request.path + '/' + links[0] }}">ХВС</a></li>
+                                        <li><a href="{{ request.path + '/' + links[1] }}">ГВС</a></li>
+                                        <li><a href="{{ request.path + '/' + links[2] }}">Эл. энергия</a></li>
 
                                         {% if links[3] != '#' %}
 
-                                            <li><a href="{{ request.path + links[3] }}">Теп. энергия</a></li>
+                                            <li><a href="{{ request.path + '/' + links[3] }}">Теп. энергия</a></li>
 
                                         {% else %}
 
