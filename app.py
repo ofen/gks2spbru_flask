@@ -1,8 +1,9 @@
 import database
-from utility import chunks
+import utility
 import datetime
 import os
 import io
+import csv
 
 from flask import Flask
 from flask import render_template
@@ -10,6 +11,7 @@ from flask import request
 from flask import make_response
 from flask import jsonify
 from flask import send_file
+from flask import abort
 
 
 from natsort import natsorted
@@ -38,7 +40,7 @@ def news():
 
     natsorted(files, reverse=True)
     
-    files = [file for file in chunks(files, 3)]
+    files = [file for file in utility.chunks(files, 3)]
 
     current_page = 0
     data = list()
@@ -97,15 +99,134 @@ def thank_you_letter():
 
     return render_template('thank_you_letter.htm', data=data)
 
+@app.route('/house_service_contract')
+def house_service_contract():
+    file = 'static/doc/Договор_управления_МКД.pdf'
+    filename = 'Договор_управления_МКД.pdf'
+    return send_file(file, mimetype='application/pdf', attachment_filename=filename, as_attachment=True)
+
+@app.route('/law')
+def law():
+    return render_template('law.htm')
+
+@app.route('/press')
+def press():
+    files = glob('data/press/*.htm')
+
+    natsorted(files, reverse=True)
+    
+    files = [file for file in utility.chunks(files, 3)]
+
+    current_page = 0
+    data = list()
+
+    if request.args.get('page'):
+        current_page = request.args.get('page', type=int)
+
+        for file in files[current_page]:
+            with open(file) as fh:
+                file_content = fh.read()
+                data.append(file_content)
+
+        json_data = {'result': data, 'lenght': len(files)}
+        return jsonify(json_data)
+
+    else:
+
+        for file in files[current_page]:
+            with open(file) as fh:
+                file_content = fh.read()
+                data.append(file_content)
+    
+        return render_template('press.htm', data=data)
+
+@app.route('/useful_info')
+def useful_info():
+    return render_template('useful_info.htm')
+
 @app.route('/contacts_and_working_hours')
 def contacts_and_working_hours():
     data = database.contacts_and_working_hours
     return render_template('contacts_and_working_hours.htm', data=data)
 
-@app.route('/house_service_contract')
-def house_service_contract():
-    file = 'static/doc/Договор_управления_МКД.pdf'
-    return send_file(io.StringIO(file), mimetype='application/pdf', attachment_filename='test.pdf', as_attachment=True)
+@app.route('/paid_services')
+def paid_services():
+    file = 'static/doc/Платные_услуги_2014.pdf'
+    filename = 'Платные_услуги.pdf'
+    return send_file(file, mimetype='application/pdf', attachment_filename=filename, as_attachment=True)
+
+@app.route('/utility_rate')
+def utility_rate():
+    data = database.utility_rate
+    return render_template('utility_rate.htm', data=data)
+
+@app.route('/cost_reduction')
+def cost_reduction():
+    data = database.cost_reduction
+    return render_template('cost_reduction.htm', data=data)
+
+@app.route('/financial_report')
+def financial_report():
+    data = database.financial_report
+    data = {key:value for (key, value) in sorted(data.items(), reverse=True)}
+    return render_template('financial_report.htm', data=data)
+
+@app.route('/house_report')
+def house_report():
+    return redirect('https://www.reformagkh.ru/mymanager/profile/6743234/')
+
+@app.route('/house_information')
+def house_information():
+    return redirect('https://gorod.gov.spb.ru/facilities/search/')
+
+@app.route('/house_meter_reading')
+def house_meter_reading():
+    data = database.house_meter_reading
+    data = {key:value for (key, value) in sorted(data.items(), reverse=True)}
+    return render_template('house_meter_reading.htm', data=data)
+
+@app.route('/house_meter_reading/<report_type>/<date>')
+def house_meter_reading_report(report_type, date):
+
+    allowed_types = ['cold_water', 'hot_water', 'electric_energy', 'heat_energy']
+
+    if report_type in allowed_types:
+
+        file = f'data/house_meter_reading/{report_type}_{date}.csv'
+
+        try:
+            with open(file) as csvfile:
+                data = csv.reader(csvfile)
+
+                return render_template('house_meter_reading.htm', data=data, report_type=report_type, date=date)
+        
+                    
+
+        except FileNotFoundError:
+            return abort(404)
+
+
+@app.route('/house_service_report')
+def house_service_report():
+    data = database.house_service_report
+    data = {key:value for (key, value) in sorted(data.items(), reverse=True)}
+    return render_template('house_service_report.htm', data=data)
+
+@app.route('/energy_efficiency')
+def energy_efficiency():
+    data = database.energy_efficiency
+    return render_template('energy_efficiency.htm', data=data)
+
+@app.route('/average_monthly_temperature')
+def average_monthly_temperature():
+    data = database.average_monthly_temperature
+    return render_template('average_monthly_temperature.htm', data=data)
+
+@app.route('/weekly_report')
+def weekly_report():
+    data = database.weekly_report.keys()
+    data = list(data)[::-1]
+    return render_template('weekly_report.htm', data=data)
 
 @app.route('/test')
 def test():
