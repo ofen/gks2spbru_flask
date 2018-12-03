@@ -1,4 +1,4 @@
 RewriteEngine On
 
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule .* wsgi.py [L,QSA]
+RewriteRule (.*) /main.cgi/$1 [L,QSA]

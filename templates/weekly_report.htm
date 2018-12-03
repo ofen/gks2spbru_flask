@@ -1,28 +1,34 @@
 {% extends 'layout.htm' %}
 {% block content %}
 
-    {% if date == Null %}
+    {% if not date %}
 
         <!-- Default -->
 
-        {% for period in data %}
+        {% for year, year_data in data.items() %}
 
             <table class="table table-hover">
-                <caption>Еженедельный отчет<br><span class="label label-primary">{{ period }}</span></caption>
+                <caption>Еженедельный отчет<br><span class="label label-primary">{{ year }}</span></caption>
                 <thead>
                     <tr>
-                        <th>Категория</th>
+                        <th>Период</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="col-xs-10">Текущий ремонт</td>
-                        <td><a href="{{ request.path + '/' + period }}" class="btn btn-primary">Подробнее</a></td>
-                    </tr>
+
+                    {% for period in year_data %}
+
+                        <tr>
+                            <td class="col-xs-10">Еженедельный отчет {{ period }}</td>
+                            <td><a href="{{ request.path + '/' + year + '/' + period }}" class="btn btn-primary">Подробнее</a></td>
+                        </tr>
+
+                    {% endfor %}
+
                 </tbody>
             </table>
-        
+
         {% endfor %}
 
     {% endif %}

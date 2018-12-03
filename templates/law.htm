@@ -14,22 +14,17 @@
             </thead>
             <tbody>
 
-                {% for file in files %}
+                {% for filename, filelink in files.items() %}
 
                     <tr>
-                        <td class="col-xs-10">{{ file | basename }}</td>
-                        <td><a href="{{ url_for('static', filename=file) }}" target="_blank" class="btn btn-primary"><span class="glyphicon glyphicon-download-alt"></span> Скачать</a></td>
+                        <td class="col-xs-10">{{ filename }}</td>
+                        <td><a href="{{ filelink }}" target="_blank" class="btn btn-primary"><span class="glyphicon glyphicon-download-alt"></span> Скачать</a></td>
                     </tr>
 
                 {% endfor %}
 
             </tbody>
-        </table>      
-
-    {% else %}
-
-        <p class="text-muted">Нет данных<br>
-        <span class="label label-primary">{{ year }}</span></p>
+        </table>
 
     {% endfor %}
 

@@ -3,10 +3,10 @@ import utility
 import datetime
 import os
 import io
-import csv
 
 from flask import Flask
 from flask import render_template
+from flask import render_template_string
 from flask import request
 from flask import make_response
 from flask import jsonify
@@ -24,7 +24,7 @@ app = Flask(__name__)
 
 app.jinja_env.globals['navbar'] = database.navbar_structure
 
-
+app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
 
 @app.context_processor
 def current_datetime():
@@ -38,9 +38,7 @@ def home():
 
 @app.route('/news')
 def news():
-    files = glob('data/news/*.htm')
-
-    natsorted(files, reverse=True)
+    files = natsorted(glob('data/news/*.htm'), reverse=True)
     
     files = [file for file in utility.chunks(files, 3)]
 
@@ -53,9 +51,10 @@ def news():
         for file in files[current_page]:
             with open(file) as fh:
                 file_content = fh.read()
-                data.append(file_content)
+                data.append(render_template_string(file_content))
 
         json_data = {'result': data, 'lenght': len(files)}
+
         return jsonify(json_data)
 
     else:
@@ -63,7 +62,7 @@ def news():
         for file in files[current_page]:
             with open(file) as fh:
                 file_content = fh.read()
-                data.append(file_content)
+                data.append(render_template_string(file_content))
     
         return render_template('news.htm', data=data)
 
@@ -88,14 +87,14 @@ def houses_in_service():
 
 @app.route('/thank_you_letter')
 def thank_you_letter():
-
     path = 'static/doc/thank_you_letter'
     data = dict();
     years = map(str, range(2018, 2011, -1))
 
     for year in years:
-        year_data = glob(f'{path}/*_{year}.jpg')
-        data[year] = utility.chunks(year_data, 3)
+        year_data = natsorted(glob(f"{path}/*_{year}.jpg"), reverse=True)
+        if year_data:
+            data[year] = utility.chunks(year_data, 3)
 
     return render_template('thank_you_letter.htm', data=data)
 
@@ -112,16 +111,15 @@ def law():
     years = map(str, range(2018, 2011, -1))
 
     for year in years:
-        year_data = glob(f'{path}/*.{year}.pdf')
-        data[year] = utility.to_generator(year_data)
+        year_data = natsorted(glob(f"{path}/*.{year}.pdf"), reverse=True)
+        if year_data:
+            data[year] = {os.path.basename(file): file for file in year_data}
 
     return render_template('law.htm', data=data)
 
 @app.route('/press')
 def press():
-    files = glob('data/press/*.htm')
-
-    files = natsorted(files, reverse=True)
+    files = natsorted(glob('data/press/*.htm'), reverse=True)
     
     files = [file for file in utility.chunks(files, 3)]
 
@@ -134,7 +132,7 @@ def press():
         for file in files[current_page]:
             with open(file) as fh:
                 file_content = fh.read()
-                data.append(file_content)
+                data.append(render_template_string(file_content))
 
         json_data = {'result': data, 'lenght': len(files)}
         return jsonify(json_data)
@@ -144,7 +142,7 @@ def press():
         for file in files[current_page]:
             with open(file) as fh:
                 file_content = fh.read()
-                data.append(file_content)
+                data.append(render_template_string(file_content))
     
         return render_template('press.htm', data=data)
 
@@ -175,7 +173,6 @@ def cost_reduction():
 @app.route('/financial_report')
 def financial_report():
     data = database.financial_report
-    data = {key:value for (key, value) in sorted(data.items(), reverse=True)}
     return render_template('financial_report.htm', data=data)
 
 @app.route('/house_report')
@@ -189,7 +186,6 @@ def house_information():
 @app.route('/house_meter_reading')
 def house_meter_reading():
     data = database.house_meter_reading
-    data = {key:value for (key, value) in sorted(data.items(), reverse=True)}
     return render_template('house_meter_reading.htm', data=data)
 
 @app.route('/house_meter_reading/<report_type>/<date>')
@@ -199,13 +195,11 @@ def house_meter_reading_report(report_type, date):
 
     if report_type in allowed_types:
 
-        file = f'data/house_meter_reading/{report_type}_{date}.csv'
+        file = f"data/house_meter_reading/{report_type}_{date}.csv"
 
         try:
-            with open(file) as csvfile:
-                data = csv.reader(csvfile)
-
-                return render_template('house_meter_reading.htm', data=data, report_type=report_type, date=date)
+            data = utility.read_csv(file)
+            return render_template('house_meter_reading.htm', data=data, report_type=report_type, date=date)
 
         except FileNotFoundError:
             return abort(404)
@@ -214,7 +208,6 @@ def house_meter_reading_report(report_type, date):
 @app.route('/house_service_report')
 def house_service_report():
     data = database.house_service_report
-    data = {key:value for (key, value) in sorted(data.items(), reverse=True)}
     return render_template('house_service_report.htm', data=data)
 
 @app.route('/energy_efficiency')
@@ -229,15 +222,18 @@ def average_monthly_temperature():
 
 @app.route('/weekly_report')
 def weekly_report():
-    data = database.weekly_report.keys()
-    data = list(data)[::-1]
+    data = database.weekly_report
     return render_template('weekly_report.htm', data=data)
 
-@app.route('/weekly_report/<date>')
-def weekly_report_(date):
-    if date in database.weekly_report.keys():
-        data = utility.chunks(database.weekly_report.get(date), 3)
-        return render_template('weekly_report.htm', data=data, date=date)
+@app.route('/weekly_report/<year>/<date>')
+def weekly_report_(year, date):
+
+    if year in database.weekly_report:
+        if date in database.weekly_report[year]:
+            data = utility.chunks(database.weekly_report[year][date], 3)
+            return render_template('weekly_report.htm', data=data, date=date)
+        else:
+            abort(404)
     else:
         abort(404)
 
@@ -249,6 +245,41 @@ def purchases():
 def gas_equipment_service():
     data = database.gas_equipment_service
     return render_template('gas_equipment_service.htm', data=data)
+
+@app.route('/reception', methods=['GET', 'POST'])
+def reception():
+    if request.method == 'POST':
+
+        form_data = request.form
+        attachment = request.files.get('attachment')
+        
+        errors = utility.validate_reception(form_data, attachment)
+
+        if not errors:
+            to_addr = 'to_addr@mail.ru'
+            subject = f"Интернет приемная - {form_data['subject']}"
+
+            html_msg = f"""
+                IP: {request.remote_addr}<br>
+                ФИО: {form_data['fullname']}<br>
+                Адрес: {form_data['address']}<br>
+                Телефон: {form_data['phone']}<br>
+                Email: {form_data['email']}<br>
+                Тема обращения: {form_data['subject']}<br>
+                Текст обращения:<br>
+                {form_data['body']}
+            """
+
+            utility.send_email(to_addr, subject, html_msg, attachment)
+
+            return jsonify({'result': 'OK'})
+        else:
+            return jsonify({'result': errors})
+    
+    else:
+        return render_template('reception.htm')
+
+
 
 @app.route('/test')
 def test():

@@ -14,10 +14,10 @@ $(document).ready(function() {
                 console.log(data);
                 $('div').removeClass('has-error')
                 $('div').find('.help-block').remove();
-                $('.selectpicker').val('default').selectpicker('refresh');
 
                 if (data.result == 'OK') {
                     form[0].reset();
+                    $('.selectpicker').val('default').selectpicker('refresh');
                     $('#submitModal').modal();
                 } else {
                     for (error in data.result) {
