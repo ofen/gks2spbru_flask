@@ -1,28 +1,53 @@
 {% extends 'layout.htm' %}
 {% block content %}
 
-    {% for year, year_chunks in data.items() %}
+    {% if not year %}
 
-        <p class="text-muted">Нас благодарят<br><span class="label label-primary">{{ year }}</span></p class="text-muted">
+        <!-- Table -->
+        <table class="table table-hover">
+            <caption>Нас благодарят</caption>
+            <thead>
+                <tr>
+                    <th>Год</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
 
-        {% for chunk in year_chunks %}
+                {% for year in data %}
 
-            <div class="row">
-
-                {% for item in chunk %}
-
-                    <div class="col-sm-6 col-md-4">
-                        <div class="thumbnail thumbnail-h200">
-                            <a href="{{ item }}" target="_blank"><img data-src="{{ item }}"></a>
-                        </div>
-                    </div>
+                    <tr>
+                        <td class="col-xs-10">Благодарности {{ year }}</td>
+                        <td><a href="{{ request.path + '/' + year }}" class="btn btn-primary">Подробнее</a></td>
+                    </tr>
 
                 {% endfor %}
 
-            </div>
+            </tbody>
+        </table>
 
-        {% endfor %}
+    {% else %}
 
-    {% endfor %}
+        <p class="text-muted">Нас благодарят<br><span class="label label-primary">{{ year }}</span></p>
+
+            {% for chunk in data %}
+
+                <div class="row">
+
+                    {% for item in chunk %}
+
+                        <div class="col-sm-6 col-md-4">
+                            <div class="thumbnail thumbnail-h200">
+                                <a href="{{ '/' + item }}" target="_blank"><img data-src="{{ '/' + item }}"></a>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endfor %}
+
+    {% endif %}
 
 {% endblock %}

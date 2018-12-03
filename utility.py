@@ -18,9 +18,9 @@ def read_csv(csvfile):
 
 
 
-def send_email(to_addr, subject, html_msg, attachment):
-    from_addr = 'service@mail.ru'
-    password = 'password'
+def send_email(from_addr, to_addr, subject, html_msg, attachment, server, password):
+    from_addr = from_addr
+    password = password
 
     msg = MIMEMultipart()
 
@@ -35,7 +35,7 @@ def send_email(to_addr, subject, html_msg, attachment):
         part.add_header('Content-Disposition', 'attachment', filename=attachment.filename)
         msg.attach(part)
 
-    mail = smtplib.SMTP_SSL('smtp.yandex.ru:465')
+    mail = smtplib.SMTP_SSL(server)
     mail.login(from_addr, password)
     mail.sendmail(from_addr, to_addr, msg.as_string())
     mail.close()

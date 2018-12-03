@@ -88,15 +88,27 @@ def houses_in_service():
 @app.route('/thank_you_letter')
 def thank_you_letter():
     path = 'static/doc/thank_you_letter'
-    data = dict();
+    data = list();
     years = map(str, range(2018, 2011, -1))
 
     for year in years:
         year_data = natsorted(glob(f"{path}/*_{year}.jpg"), reverse=True)
         if year_data:
-            data[year] = utility.chunks(year_data, 3)
+            data.append(year)
 
     return render_template('thank_you_letter.htm', data=data)
+
+@app.route('/thank_you_letter/<year>')
+def thank_you_letter_(year):
+    path = 'static/doc/thank_you_letter'
+
+    year_data = natsorted(glob(f"{path}/*_{year}.jpg"), reverse=True)
+
+    if year_data:
+        data = utility.chunks(year_data, 3)
+        return render_template('thank_you_letter.htm', data=data, year=year)
+    else:
+        return abort(404)
 
 @app.route('/house_service_contract')
 def house_service_contract():
@@ -256,7 +268,11 @@ def reception():
         errors = utility.validate_reception(form_data, attachment)
 
         if not errors:
-            to_addr = 'to_addr@mail.ru'
+            from_addr = ''
+            to_addr = ''
+            server = 'smtp.yandex.ru:465'
+            password = ''
+
             subject = f"Интернет приемная - {form_data['subject']}"
 
             html_msg = f"""
@@ -270,7 +286,7 @@ def reception():
                 {form_data['body']}
             """
 
-            utility.send_email(to_addr, subject, html_msg, attachment)
+            utility.send_email(from_addr, to_addr, subject, html_msg, attachment, server, password)
 
             return jsonify({'result': 'OK'})
         else:
