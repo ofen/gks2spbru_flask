@@ -10,11 +10,11 @@ navbar_structure = {
             'Нас благодарят': '/thank_you_letter',
             'Мы в прессе': '/press',
             # 'Полезная информация': '/useful_info',
-            'Контакты и часы работы': '/contacts_and_working_hours',
             'Вакансии': '/job',
+            'Контакты и часы работы': '/contacts_and_working_hours',
         },
         'Раскрытие информации': {
-            'Подомовая отчетность (Постановление №731 от 23.10.2010)': '/house_report',
+            'Подомовая отчетность': '/house_report',
             'Информация о доме': '/house_information',
             'Бухгалтерская отчетность': '/financial_report',
             'Показания ОДПУ': '/house_meter_reading',
