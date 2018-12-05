@@ -268,10 +268,10 @@ def reception():
         errors = utility.validate_reception(form_data, attachment)
 
         if not errors:
-            from_addr = ''
-            to_addr = ''
+            from_addr = 'server@yandex.ru'
+            to_addr = ['example@yandex.ru']
             server = 'smtp.yandex.ru:465'
-            password = ''
+            password = 'pa$$word'
 
             subject = f"Интернет приемная - {form_data['subject']}"
 

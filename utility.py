@@ -25,7 +25,7 @@ def send_email(from_addr, to_addr, subject, html_msg, attachment, server, passwo
     msg = MIMEMultipart()
 
     msg['From'] = from_addr
-    msg['To'] = to_addr
+    msg['To'] = ', '.join(to_addr)
     msg['Subject'] = subject
 
     msg.attach(MIMEText(html_msg, 'html'))
