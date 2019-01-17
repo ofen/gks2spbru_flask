@@ -6,6 +6,9 @@ import os
 import re
 from werkzeug.utils import secure_filename
 import csv
+from PIL import Image
+import io
+from flask import Response
 
 def chunks(l, n):
     for i in range(0, len(l), n):
@@ -16,7 +19,12 @@ def read_csv(csvfile):
         for row in csv.reader(fh):
             yield row
 
-
+def get_thumbnail(image):
+    size = 150, 150
+    im = Image.open(image)
+    io = io.StringIO()
+    im.thumbnail(size, Image.ANTIALIAS)
+    return Response(io.getvalue(), mimetype='image/jpeg')
 
 def send_email(from_addr, to_addr, subject, html_msg, attachment, server, password):
     from_addr = from_addr

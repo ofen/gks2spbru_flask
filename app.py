@@ -14,6 +14,10 @@ from flask import send_file
 from flask import abort
 from flask import redirect
 from flask import url_for
+from flask import Response
+
+from PIL import Image
+
 
 
 from natsort import natsorted
@@ -31,6 +35,15 @@ def current_datetime():
     return dict(current_datetime=datetime.datetime.now())
 
 # Routes
+
+@app.route('/get_thumbnail/<path:image>')
+def get_thumbnail(image):
+    size = 300, 300
+    im = Image.open(image)
+    im.thumbnail(size, Image.ANTIALIAS)
+    output = io.BytesIO()
+    im.save(output, format='JPEG')
+    return send_file(output, mimetype='image/jpeg')
 
 @app.route('/')
 def home():

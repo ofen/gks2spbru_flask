@@ -1,0 +1,1 @@
+Simple website for [https://gks2spb.ru](https://gks2spb.ru) based on Bootstrap and Flask.
